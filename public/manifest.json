@@ -14,7 +14,7 @@
     }
   ],
   "background_color": "#06092B",
-  "description": "Template utilizando Typescript, React, NextJS e Styled Components!",
+  "description": "Template utilizando Typescript, React, NextJS e TailwindCSS!",
   "display": "fullscreen",
   "start_url": "/",
   "theme_color": "#06092B"
