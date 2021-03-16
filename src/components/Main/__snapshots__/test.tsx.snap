@@ -2,7 +2,7 @@
 
 exports[`<Main /> should render the heading 1`] = `
 <section
-  class="w-full h-screen py-8 lg:py-16 bg-indigo-900"
+  class="font-sans antialiased w-full h-screen py-8 lg:py-16 bg-indigo-900"
 >
   <div
     class="mx-auto max-w-prose flex-col justify-center items-center text-center"

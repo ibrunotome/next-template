@@ -1,5 +1,5 @@
 const Main = () => (
-  <section className="w-full h-screen py-8 lg:py-16 bg-indigo-900">
+  <section className="font-sans antialiased w-full h-screen py-8 lg:py-16 bg-indigo-900">
     <div className="mx-auto max-w-prose flex-col justify-center items-center text-center">
       <h1 className="text-white text-2xl lg:text-5xl">Template</h1>
       <p className="my-8 text-white text-lg">
