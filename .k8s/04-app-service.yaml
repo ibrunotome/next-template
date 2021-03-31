@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  namespace: template
+  labels:
+    name: app
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3000
+  selector:
+    name: app

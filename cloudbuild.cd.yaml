@@ -1,0 +1,38 @@
+steps:
+  - id: 'Copy .env'
+    name: gcr.io/cloud-builders/gsutil
+    waitFor: ['-']
+    args: ['cp', '$_ENV_PATH', '.env']
+
+  - id: 'Create env secret manifest'
+    name: gcr.io/cloud-builders/kubectl
+    entrypoint: /bin/sh
+    args:
+      - -c
+      - |
+        kubectl create secret generic env --from-env-file .env --dry-run -n template -o yaml > .k8s/02.0-app-secret.yaml
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=$_ZONE'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER'
+
+  - id: 'Build docker image'
+    name: gcr.io/cloud-builders/docker
+    args: ['build',  '-t', 'gcr.io/$PROJECT_ID/template:$SHORT_SHA', '-t', 'gcr.io/$PROJECT_ID/template:latest', '.']
+
+  - id: 'Push docker image'
+    name: gcr.io/cloud-builders/docker
+    args: ['push', 'gcr.io/$PROJECT_ID/template']
+
+  - id: 'Set app image SHORT_SHA'
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: /bin/sh
+    args:
+      - '-c'
+      - |
+        sed -i 's/SHORT_SHA/$SHORT_SHA/g' .k8s/02-app-deployment.yaml
+
+  - id: 'Deploy'
+    name: gcr.io/cloud-builders/gke-deploy
+    args: ['apply', '-f', '.k8s/', '--cluster', '$_CLUSTER', '--location', '$_ZONE']
+images:
+  - 'gcr.io/$PROJECT_ID/template:$SHORT_SHA'
